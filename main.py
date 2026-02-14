@@ -13,7 +13,7 @@ def listener_thread(listener, command_queue):
 if __name__ == "__main__":
     Nexa = NexaSpeaker()
     Nexa.speak("Initializing Nexa...")
-    
+
     listener = NexaListener()
     command_queue = Queue()
 
@@ -26,6 +26,8 @@ if __name__ == "__main__":
             if command:
                 if "hello" in command:
                     Nexa.speak("Hello! How can I assist you today?")
+                elif "search" in command.lower() or "what is" in command.lower():
+                    Nexa.speak("Nexa is searching, give her a minute.")
                 elif "what is time" in command:
                     now = datetime.now().strftime("%H:%M")
                     Nexa.speak(f"The current time is {now}.")
