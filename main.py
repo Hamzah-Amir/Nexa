@@ -27,13 +27,16 @@ if __name__ == "__main__":
             if command:
                 if "hello" in command:
                     Nexa.speak("Hello! How can I assist you today?")
+
                 elif "search" in command.lower() or "what is" in command.lower():
                     Nexa.speak("Nexa is searching, give her a minute.")
                     report = NexaSearch.search(command)
                     Nexa.speak(f"Nexa has gathered the report: {report}")
+
                 elif "what is time" in command:
                     now = datetime.now().strftime("%H:%M")
                     Nexa.speak(f"The current time is {now}.")
+                    
                 elif "exit" in command or "quit" in command:
                     Nexa.speak("Goodbye!")
                     break
