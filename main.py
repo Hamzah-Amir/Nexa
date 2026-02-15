@@ -21,28 +21,31 @@ if __name__ == "__main__":
     utils = Utils()
     Nexa = NexaSpeaker()
     nexa_search = NexaSearch()
-    Nexa.speak("Nexa Standby, waiting for your command.")
+    is_awake = True
+    Nexa.speak("Initializing Nexa. Ready to assist you.")
 
     listener = NexaListener()
     command_queue = Queue()
 
     t = threading.Thread(target=listener_thread, args=(listener, command_queue), daemon=True)
     t.start()
-    is_running = False
     while True:
             command = command_queue.get()
             command = command.lower()
 
-            if not is_running:
-                if "hello nexa" in command:
-                    is_running = True
-                    Nexa.speak("Initializing Nexa. How can I assist you?")
+            if not is_awake and ("wake up" not in command):
                 continue
 
-            if command in commands:
-                commands[command]()
-                if "hello" in command:
-                    Nexa.speak("Hello! How can I assist you today?")
+            if command and is_awake:
+                if "go to sleep" in command:
+                    Nexa.speak("Nexa is going to sleep. Say 'Nexa wake up' to wake her up.")
+                    is_awake = False
+                    logger.log(command, "go_to_sleep", "Nexa went to sleep successfully.")
+
+                elif "wake up" in command:
+                    Nexa.speak("Nexa is awake and ready to assist you.")
+                    is_awake = True
+                    logger.log(command, "wake_up", "Nexa woke up successfully.")
 
                 elif "search" in command.lower() or "what is" in command.lower():
                     Nexa.speak("Nexa is searching, give her a minute.")
