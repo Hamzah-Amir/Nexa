@@ -1,6 +1,5 @@
 from queue import Queue
 import threading
-from commands import commands
 from datetime import datetime
 from tts import NexaSpeaker
 from listener import NexaListener
@@ -39,20 +38,19 @@ wake_lines = [
         "Nexa is back and ready to assist. What do you need?"
     ]
 
-if __name__ == "__main__":
-    utils = Utils()
-    Nexa = NexaSpeaker()
-    nexa_search = NexaSearch()
-    is_awake = True
-    Nexa.speak(choice(starter_lines))
+utils = Utils()
+Nexa = NexaSpeaker()
+nexa_search = NexaSearch()
+is_awake = True
+Nexa.speak(choice(starter_lines))
 
-    listener = NexaListener()
-    command_queue = Queue()
+listener = NexaListener()
+command_queue = Queue()
 
 
-    t = threading.Thread(target=listener_thread, args=(listener, command_queue), daemon=True)
-    t.start()
-    while True:
+t = threading.Thread(target=listener_thread, args=(listener, command_queue), daemon=True)
+t.start()
+while True:
             command = command_queue.get()
             command = command.lower()
 
