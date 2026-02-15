@@ -34,8 +34,3 @@ Query: "{query}" """)
         )
 
         return {"image": response}
-    
-Nexa = NexaSpeaker()
-Nexa_search = NexaSearch()
-data = Nexa_search.search("Predict starting lineups of FC Barcelona for barcelona vs girona match today 2026 Laliga and also predict the scoreline of the match as well as which player may score ")
-Nexa.speak(data['response'])
