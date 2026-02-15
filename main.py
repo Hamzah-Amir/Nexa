@@ -1,8 +1,9 @@
-from tts import NexaSpeaker
-from listener import NexaListener
 from queue import Queue
 import threading
 from datetime import datetime
+from tts import NexaSpeaker
+from listener import NexaListener
+from search_api import NexaSearch
 
 def listener_thread(listener, command_queue):
     while True:
@@ -28,6 +29,8 @@ if __name__ == "__main__":
                     Nexa.speak("Hello! How can I assist you today?")
                 elif "search" in command.lower() or "what is" in command.lower():
                     Nexa.speak("Nexa is searching, give her a minute.")
+                    report = NexaSearch.search(command)
+                    Nexa.speak(f"Nexa has gathered the report: {report}")
                 elif "what is time" in command:
                     now = datetime.now().strftime("%H:%M")
                     Nexa.speak(f"The current time is {now}.")
