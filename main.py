@@ -94,6 +94,11 @@ if __name__ == "__main__":
                     utils.open_code()
                     logger.log(command, "open_code", "Visual Studio Code opened successfully.")
                 
+                elif "open gmail" in command:
+                    Nexa.speak("Opening Gmail for you.")
+                    utils.open_gmail()
+                    logger.log(command, "open_gmail", "Gmail opened successfully.")
+                
                 elif "open browser" in command:
                     Nexa.speak("Opening your default web browser.")
                     utils.open_browser()
