@@ -6,6 +6,9 @@ from tts import NexaSpeaker
 from listener import NexaListener
 from search_api import NexaSearch
 from utils import Utils
+from logger import Logger
+
+logger = Logger()
 
 def listener_thread(listener, command_queue):
     while True:
@@ -46,71 +49,87 @@ if __name__ == "__main__":
                     report = nexa_search.search(command)
                     print("Report gathered: ", report['response'])
                     Nexa.speak(f"Nexa has gathered the report: {report['response']}")
+                    logger.log(command, "search", report['response'])
 
                 elif "what is time" in command:
                     now = datetime.now().strftime("%H:%M")
                     Nexa.speak(f"The current time is {now}.")
+                    logger.log(command, "time", now)
                 
                 elif "generate image" in command.lower():
                     Nexa.speak("Nexa is generating the image, give her a minute.")
                     image_response = nexa_search.generate_image(command)
                     print("Image generated: ", image_response['image'])
                     Nexa.speak("Nexa has generated the image based on your query.")
+                    logger.log(command, "generate_image", f"Image generated successfully at {image_response['image']}")
                 
                 elif "open code" in command:
                     Nexa.speak("Opening Visual Studio Code for you.")
                     utils.open_code()
+                    logger.log(command, "open_code", "Visual Studio Code opened successfully.")
                 
                 elif "open browser" in command:
                     Nexa.speak("Opening your default web browser.")
                     utils.open_browser()
+                    logger.log(command, "open_browser", "Web browser opened successfully.")
                 
                 elif "open linkedin" in command:
                     Nexa.speak("Opening LinkedIn for you.")
                     utils.open_linkedin()
+                    logger.log(command, "open_linkedin", "LinkedIn opened successfully.")
                     
                 elif "open facebook" in command:
                     Nexa.speak("Opening Facebook for you.")
                     utils.open_facebook()
+                    logger.log(command, "open_facebook", "Facebook opened successfully.")
                 
                 elif "open github" in command:
                     Nexa.speak("Opening GitHub for you.")
                     utils.open_github()
+                    logger.log(command, "open_github", "GitHub opened successfully.")
                 
                 elif "take screenshot" in command:
                     Nexa.speak("Taking a screenshot for you.")
                     screenshot_path = utils.take_screenshot()
                     Nexa.speak(f"Screenshot taken and saved as {screenshot_path}.")
+                    logger.log(command, "take_screenshot", f"Screenshot saved at {screenshot_path}")
                 
                 elif "copy" in command:
                     text_to_copy = command.replace("copy", "").strip()
                     utils.copy_to_clipboard(text_to_copy)
                     Nexa.speak("Text copied to clipboard.")
+                    logger.log(command, "copy", f"Copied text: {text_to_copy}")
                 
                 elif "paste" in command:
                     clipboard_content = utils.read_from_clipboard()
                     Nexa.speak(f"The clipboard contains: {clipboard_content}")
+                    logger.log(command, "paste", f"Pasted text: {clipboard_content}")
                 
                 elif "lock screen" in command:
                     Nexa.speak("Locking your screen.")
                     utils.lock_screen()
+                    logger.log(command, "lock_screen", "Screen locked successfully.")
                 
                 elif "type" in command:
                     text_to_type = command.replace("type", "").strip()
                     utils.type_text(text_to_type)
                     Nexa.speak("Typing the text for you.")
+                    logger.log(command, "type_text", f"Typed text: {text_to_type}")
                 
                 elif "scroll up" in command:
                     utils.scroll_up()
                     Nexa.speak("Scrolled up.")
+                    logger.log(command, "scroll_up", "Scrolled up successfully.")
                 
                 elif "scroll down" in command:
                     utils.scroll_down()
                     Nexa.speak("Scrolled down.")
+                    logger.log(command, "scroll_down", "Scrolled down successfully.")
                 
                 elif "switch app" in command:
                     utils.switch_window()
                     Nexa.speak("Switched to the next app.")
+                    logger.log(command, "switch_window", "Switched to the next app successfully.")
 
                 elif "exit" in command or "quit" in command:
                     Nexa.speak("Goodbye!")
