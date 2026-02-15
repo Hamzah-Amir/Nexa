@@ -34,6 +34,3 @@ Query: "{query}" """)
         )
 
         return {"image": response}
-
-nexa_search = NexaSearch()
-nexa_speak = NexaSpeaker()
