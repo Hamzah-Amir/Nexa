@@ -3,7 +3,7 @@ import threading
 from datetime import datetime
 from tts import NexaSpeaker
 from listener import NexaListener
-from search_api import NexaSearch
+from search_api import Nexa_search, NexaSearch
 
 def listener_thread(listener, command_queue):
     while True:
@@ -30,8 +30,10 @@ if __name__ == "__main__":
 
                 elif "search" in command.lower() or "what is" in command.lower():
                     Nexa.speak("Nexa is searching, give her a minute.")
-                    report = NexaSearch.search(command)
-                    Nexa.speak(f"Nexa has gathered the report: {report}")
+                    nexa_search = NexaSearch()
+                    report = Nexa_search.search(command)
+                    print("Report gathered: ", report['response'])
+                    Nexa.speak(f"Nexa has gathered the report: {report['response']}")
 
                 elif "what is time" in command:
                     now = datetime.now().strftime("%H:%M")

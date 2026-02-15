@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from google import genai
+from tts import NexaSpeaker
 
 load_dotenv()
 class NexaSearch:
@@ -10,26 +11,31 @@ class NexaSearch:
         )
     
     def search(self, query):
-        response = self.client.models.generate_content(
-            model="gemini-2.5",
-            contents=f"You are an expert researcher and give information on facts only, answr this query: \"{query}\" and you last limit of maximum sentences is 12 you always try to give shortest and to the point answer to the query and barely use 9 to 12 sentences."
-        )
-        data = response.text
-        summary = self.summarize(data) 
-        return {"response": summary}
+        try:        
+            response = self.client.models.generate_content(
+                model="gemini-3-flash-preview",
+contents=f"""Answer the user query using only verifiable facts.
+If the user asks for a prediction or opinion, provide a concise,prediction based on current trends
+Provide a tight response in 1 to 3 sentences (extendable if necessary for clarity).
+Avoid unnecessary words, commentary, or filler.
+Query: "{query}" """)
+
+            data = getattr(response, "text", "")
+            print(data)
+            return {"response": data}
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return {"response": "Sorry, I couldn't fetch the information right now."}
     
     def generate_image(self, query):
         response = self.client.models.generate_image(
             model="nano-banana-pro-preview",
-            content=query
+            contents=query
         )
 
         return {"image": response}
     
-    def summarize(self, query):
-        summary = self.client.models.generate_content(
-            model="gemini-2.5",
-            content=f"You are an Nexa AI powered desktop assistant, make a well defined and top notch summary of this query: {query} not more than 7 sentences and make summary without commentary"
-        )
-
-        return summary.text
+Nexa = NexaSpeaker()
+Nexa_search = NexaSearch()
+data = Nexa_search.search("Predict starting lineups of FC Barcelona for barcelona vs girona match today 2026 Laliga and also predict the scoreline of the match as well as which player may score ")
+Nexa.speak(data['response'])
