@@ -26,6 +26,10 @@ class Utils:
         os.startfile("C:/Users/Hamza/AppData/Local/Programs/Microsoft VS Code/code.exe")
         return True
     
+    def open_gmail(self):
+        webbrowser.open("https://mail.google.com")
+        return True 
+    
     def open_browser(self):
         os.startfile("C:/Program Files/Google/Chrome/Application/chrome.exe")
         return True
