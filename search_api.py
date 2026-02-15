@@ -13,9 +13,9 @@ class NexaSearch:
     def search(self, query):
         try:        
             response = self.client.models.generate_content(
-                model="gemini-3-flash-preview",
+                model="gemini-2.5-pro",
 contents=f"""Answer the user query using only verifiable facts.
-If the user asks for a prediction or opinion, provide a concise,prediction based on current trends
+and give predictions and facts only when user asks for it.,
 Provide a tight response in 1 to 3 sentences (extendable if necessary for clarity).
 Avoid unnecessary words, commentary, or filler.
 Query: "{query}" """)
@@ -34,3 +34,6 @@ Query: "{query}" """)
         )
 
         return {"image": response}
+
+nexa_search = NexaSearch()
+nexa_speak = NexaSpeaker()
