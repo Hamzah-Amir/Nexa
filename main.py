@@ -7,6 +7,7 @@ from listener import NexaListener
 from search_api import NexaSearch
 from utils import Utils
 from logger import Logger
+from random import choice
 
 logger = Logger()
 
@@ -17,15 +18,37 @@ def listener_thread(listener, command_queue):
             command_queue.put(command)
 
 
+starter_lines = [
+        "Initializing Nexa. Ready to assist you.",
+        "Hello! Nexa is up and running. How can I assist you today?",
+        "Hello! Nexa online and listening.",
+        "Nexa is ready to assist you. What can I do for you today?"
+    ]
+
+
+sleep_lines = [
+        "Nexa is going to sleep. Say 'Nexa wake up' to wake me.",
+        "Entering sleep mode. I'll be quiet until you call me.",
+        "Nexa is taking a nap. I'll be here when you wake me up.",
+        ]
+
+wake_lines = [
+        "Nexa is awake and ready to assist you.",
+        "Back online! What can I do for you?",
+        "Nexa is awake and listening. How can I help you?"
+        "Nexa is back and ready to assist. What do you need?"
+    ]
+
 if __name__ == "__main__":
     utils = Utils()
     Nexa = NexaSpeaker()
     nexa_search = NexaSearch()
     is_awake = True
-    Nexa.speak("Initializing Nexa. Ready to assist you.")
+    Nexa.speak(choice(starter_lines))
 
     listener = NexaListener()
     command_queue = Queue()
+
 
     t = threading.Thread(target=listener_thread, args=(listener, command_queue), daemon=True)
     t.start()
@@ -38,12 +61,12 @@ if __name__ == "__main__":
 
             if command and is_awake:
                 if "go to sleep" in command:
-                    Nexa.speak("Nexa is going to sleep. Say 'Nexa wake up' to wake her up.")
+                    Nexa.speak(choice(sleep_lines))
                     is_awake = False
                     logger.log(command, "go_to_sleep", "Nexa went to sleep successfully.")
 
                 elif "wake up" in command:
-                    Nexa.speak("Nexa is awake and ready to assist you.")
+                    Nexa.speak(choice(wake_lines))
                     is_awake = True
                     logger.log(command, "wake_up", "Nexa woke up successfully.")
 
