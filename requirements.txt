@@ -9,4 +9,5 @@ langchain
 langgraph
 langchain-core
 langchain-openai
-ravily-python
+tavily-python
+langchain-tavily
