@@ -11,3 +11,5 @@ langchain-core
 langchain-openai
 tavily-python
 langchain-tavily
+langchain-google-genai
+IPython
