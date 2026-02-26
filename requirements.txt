@@ -5,4 +5,7 @@ pyttsx3
 requests
 python-dotenv
 pynput
-playsound
+langchain
+langgraph
+langchain-core
+langchain-openai
