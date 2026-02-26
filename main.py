@@ -4,7 +4,7 @@ from datetime import datetime
 from tts import NexaSpeaker
 from listener import NexaListener
 from search_api import NexaSearch
-from utils import Utils
+from tools import Utils
 from logger import Logger
 from random import choice
 
