@@ -17,7 +17,7 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
 # Initializing the model
-model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(
+llm: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(
     model="gemini-3-flash-preview",
     api_key=api_key,
     temperature=0,
@@ -44,13 +44,13 @@ tools = [
     read_from_clipboard
 ]
 
-custom_model = model.bind_tools(tools)
+custom_model = llm.bind_tools(tools)
 
 # Defining Agent Node
 class AgentState(BaseModel):
     messages: Annotated[list[BaseMessage], add_messages]
 
-def agent(state:AgentState) -> AgentState:
+def model(state:AgentState) -> AgentState:
     return {
         "messages":[ custom_model.invoke(
             [
@@ -69,7 +69,7 @@ Follow these rules:
 
 You will receive user queries and a list of available tools; use your judgment to call tools when appropriate and provide helpful responses.""")
             ]
-            + state["messages"]
+            + state.messages
         )
         ]
     }
@@ -86,16 +86,16 @@ def should_continue(state: AgentState):
     
 
 # Building the Graph
-builder: StateGraph = StateGraph(AgentState)
+agent_builder: StateGraph = StateGraph(AgentState)
 
 # Adding nodes
-builder.add_node("agent", agent)
-builder.add_node("tools", ToolNode(tools))
+agent_builder.add_node("model", model)
+agent_builder.add_node("tools", ToolNode(tools))
 
 # Connecting the graph flow
-builder.add_edge(START, "agent")
-builder.add_conditional_edges(
-    'agent',
+agent_builder.add_edge(START, "model")
+agent_builder.add_conditional_edges(
+    'model',
     should_continue,
     {
         "end": END,
@@ -103,10 +103,7 @@ builder.add_conditional_edges(
     }
 )
 
-builder.add_edge("tools", 'agent')
+agent_builder.add_edge("tools", 'model')
 
 # Compiling the graph
-graph = builder.compile()
-
-# Displaying the Graph
-display(Image(graph.get_graph().draw_mermaid_png()))
+agent = agent_builder.compile()
