@@ -4,12 +4,13 @@ from xml.parsers.expat import model
 import pyperclip
 import pyautogui
 from dotenv import load_dotenv
+from typing import Dict
 from langchain.tools import tool
 from langchain_tavily import TavilySearch
 load_dotenv()
 
-
-def google_search(query):
+@tool
+def google_search(query: str) -> Dict[str, str]:
     """
     Docstring for tool:
     Use this tool when the user's query involves current events, recent news, or any information not known to the LLM.
@@ -25,90 +26,91 @@ def google_search(query):
 
 
 @tool
-def open_code():
+def open_code() -> bool:
     """Open Visual Studio Code on the local machine."""
     os.startfile("C:/Users/Hamza/AppData/Local/Programs/Microsoft VS Code/code.exe")
     return True
 
 
 @tool
-def open_gmail():
+def open_gmail() -> bool:
     """Open Gmail in the default web browser."""
+    print("Opening Gmail")
     webbrowser.open("https://mail.google.com")
     return True
 
 
 @tool
-def open_browser():
+def open_browser() -> bool:
     """Open Google Chrome browser."""
     os.startfile("C:/Program Files/Google/Chrome/Application/chrome.exe")
     return True
 
 
 @tool
-def open_linkedin():
+def open_linkedin() -> bool:
     """Open LinkedIn website in the browser."""
     webbrowser.open("https://www.linkedin.com")
     return True
 
 
 @tool
-def open_github():
+def open_github() -> bool:
     """Open GitHub website in the browser."""
     webbrowser.open("https://www.github.com")
     return True
 
 
 @tool
-def open_facebook():
+def open_facebook() -> bool:
     """Open Facebook website in the browser."""
     webbrowser.open("https://www.facebook.com")
     return True
 
 
 @tool
-def copy_to_clipboard(text):
+def copy_to_clipboard(text: str) -> bool:
     """Copy the given text to the system clipboard."""
     pyperclip.copy(text)
     return True
 
 
 @tool
-def read_from_clipboard():
+def read_from_clipboard() -> str:
     """Read and return text from the system clipboard."""
     return pyperclip.paste()
 
 
 @tool
-def lock_screen():
+def lock_screen() -> bool:
     """Lock the Windows screen."""
     pyautogui.hotkey('win', 'l')
     return True
 
 
 @tool
-def type_text(text):
+def type_text(text: str) -> bool:
     """Type the given text at the current cursor position."""
     pyautogui.typewrite(text)
     return True
 
 
 @tool
-def scroll_up():
+def scroll_up() -> bool:
     """Scroll the screen up."""
     pyautogui.scroll(500)
     return True
 
 
-# @tool
-def scroll_down():
+@tool
+def scroll_down() -> bool:
     """Scroll the screen down."""
     pyautogui.scroll(-500)
     return True
 
 
 @tool
-def take_screenshot():
+def take_screenshot() -> str:
     """Take a screenshot and save it to ./screenshots/screenshot.png."""
     screenshot = pyautogui.screenshot()
     screenshot.save("./screenshots/screenshot.png")
@@ -116,14 +118,14 @@ def take_screenshot():
 
 
 @tool
-def switch_window():
+def switch_window() -> bool:
     """Switch to the next open window using Alt+Tab."""
     pyautogui.hotkey('alt', 'tab')
     return True
 
 
 @tool
-def open_chatgpt():
+def open_chatgpt() -> bool:
     """Open ChatGPT website in the browser."""
     webbrowser.open("https://chat.openai.com")
     return True
